@@ -4,6 +4,7 @@ import com.george.domain.ResponseResult;
 import com.george.entity.User;
 import com.george.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +30,14 @@ public class LoginController {
     public ResponseResult login(@RequestBody User user){
         //登录
         return loginService.login(user);
+    }
+
+    /**
+     * 退出登录
+     * @return
+     */
+    @GetMapping("/user/logout")
+    public ResponseResult logout() {
+        return loginService.logout();
     }
 }

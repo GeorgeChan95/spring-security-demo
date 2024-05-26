@@ -1,5 +1,6 @@
 package com.george.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.george.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ import java.util.Collection;
 @Data //get和set方法
 @NoArgsConstructor //无参构造
 @AllArgsConstructor  //带参构造
+@JsonIgnoreProperties(ignoreUnknown = true) // 解决实体字段不存在时，jackson反序列化异常的问题，参考：https://www.cnblogs.com/east7/p/15388789.html
 public class LoginUser implements UserDetails {
 
     private User user;

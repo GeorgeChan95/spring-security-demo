@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -54,7 +55,23 @@ public class LoginServiceImpl implements LoginService {
         // 把完整的用户信息存入redis，其中userid作为key，注意存入redis的时候加了前缀 login:
         Map<String, String> map = new HashMap<>();
         map.put("token",jwt);
-        redisTemplate.opsForValue().set("login:" + userId, loginUser);
+        redisTemplate.opsForHash().put("login:" + userId, userId, loginUser);
         return  new ResponseResult(200,"登录成功",map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取我们在JwtAuthenticationTokenFilter类写的SecurityContextHolder对象中的用户id
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        //loginUser是我们在domain目录写好的实体类
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        //获取用户id
+        Long userid = loginUser.getUser().getId();
+
+        //根据用户id，删除redis中的token值，注意我们的key是被 login: 拼接过的，所以下面写完整key的时候要带上 longin:
+        String redisKey = "login:"+userid;
+        redisTemplate.opsForHash().delete(redisKey, userid.toString());
+
+        return new ResponseResult(200,"注销成功");
     }
 }

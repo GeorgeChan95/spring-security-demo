@@ -7,7 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * <p></p>
+ * <p>
+ *     参考笔记：
+ *     https://www.yuque.com/huanfqc/springsecurity/springsecurity#HizsM
+ * </p>
  *
  * @author George
  * @date 2024.05.25 09:27

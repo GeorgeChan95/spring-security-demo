@@ -69,7 +69,7 @@ public class MysqlGeneratorTest {
 
         // 代码生成器，生成策略配置
         StrategyConfig strategyConfig = new StrategyConfig.Builder()
-                .addInclude("sys_user") // 生成的表
+                .addInclude("sys_menu","sys_role") // 生成的表
                 .addTablePrefix("sys_", "b_") // 表前缀
                 .entityBuilder() // Entity 策略配置
                 .enableLombok() // 开启 lombok 模型

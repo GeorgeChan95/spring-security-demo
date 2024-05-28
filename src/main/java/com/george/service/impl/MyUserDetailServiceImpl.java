@@ -1,18 +1,15 @@
 package com.george.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.george.domain.LoginUser;
 import com.george.entity.User;
+import com.george.mapper.MenuMapper;
 import com.george.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +27,9 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private MenuMapper menuMapper;
+
 
     /**
      * UserDetails是Security官方提供的接口
@@ -46,10 +46,10 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
         }
 
         // 自定义权限集合，等下还要在LoginUser类做权限集合的转换
-        List<String> list = new ArrayList<>(Arrays.asList("test", "admin", "george"));
+        List<String> perms = menuMapper.selectPermsByUserId(user.getId());
 
         //把查询到的user结果，封装成UserDetails类型，然后返回。
         //但是由于UserDetails是个接口，所以我们先需要在domino目录新建LoginUser类，作为UserDetails的实现类，再写下面那行
-        return new LoginUser(user, list);
+        return new LoginUser(user, perms);
     }
 }
